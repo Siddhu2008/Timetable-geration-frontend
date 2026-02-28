@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Custom Properties ─────────────────────────────────── */
+:root {
+  /* Dark mode defaults */
+  --color-bg: #050a14;
+  --color-bg-2: #0d1b2a;
+  --color-surface: rgba(255, 255, 255, 0.04);
+  --color-surface-hover: rgba(255, 255, 255, 0.08);
+  --color-border: rgba(255, 255, 255, 0.10);
+  --color-border-hover: rgba(255, 255, 255, 0.20);
+  --color-text: #f0f4f8;
+  --color-text-muted: #94a3b8;
+  --color-text-faint: #475569;
+  --color-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  --color-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(197, 160, 34, 0.1);
+}
+
+/* Light mode overrides */
+:root.light,
+html:not(.dark) {
+  --color-bg: #f0f4f8;
+  --color-bg-2: #e2e8f0;
+  --color-surface: rgba(255, 255, 255, 0.80);
+  --color-surface-hover: rgba(255, 255, 255, 0.95);
+  --color-border: rgba(0, 0, 0, 0.10);
+  --color-border-hover: rgba(0, 0, 0, 0.20);
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
+  --color-text-faint: #94a3b8;
+  --color-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.12);
+  --color-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.10), 0 0 20px rgba(197, 160, 34, 0.15);
+}
+
+/* ─── Base Styles ───────────────────────────────────────────── */
+html {
+  background-color: var(--color-bg);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+body {
+  @apply font-body antialiased;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+}
+
+/* Full dark mode body overlay */
+html.dark body {
+  background: fixed radial-gradient(circle at top right, #0d1b2a 0%, #050a14 60%);
+}
+
+/* Full light mode body gradient */
+html:not(.dark) body {
+  background: fixed linear-gradient(135deg, #f0f4f8 0%, #dde8f5 100%);
+}
+
+/* ─── Component Utilities ───────────────────────────────────── */
+.input {
+  @apply w-full rounded-xl border p-3 backdrop-blur-md transition focus:outline-none focus:ring-2 focus:ring-secondary/30;
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.input:focus {
+  border-color: #c5a022;
+}
+
+.input::placeholder {
+  color: var(--color-text-faint);
+}
+
+/* Fix native select text in light mode */
+.input option {
+  background-color: var(--color-bg-2);
+  color: var(--color-text);
+}
+
+.btn {
+  @apply relative overflow-hidden rounded-xl bg-gradient-to-r from-secondary to-gold-dark px-6 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-[0_4px_15px_#c5a0224d] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_25px_#c5a02280] active:scale-95;
+}
+
+.btn-secondary {
+  @apply rounded-xl border border-secondary/50 bg-transparent px-6 py-3 text-sm font-bold uppercase tracking-wider text-secondary transition-all duration-300 hover:bg-secondary/10;
+}
+
+.glass-card {
+  @apply rounded-2xl border transition-all duration-500;
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  box-shadow: var(--color-shadow);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  perspective: 1000px;
+}
+
+.glass-card:hover {
+  border-color: var(--color-border-hover);
+  transform: translateY(-4px) scale(1.005);
+  box-shadow: var(--color-card-hover-shadow);
+}
+
+/* ─── Royal Header ──────────────────────────────────────────── */
+.royal-header {
+  background: linear-gradient(90deg, #ffffff 0%, #c5a022 50%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 10px rgba(197, 160, 34, 0.3));
+}
+
+/* In light mode, darken the header so it's visible on a light background */
+html:not(.dark) .royal-header {
+  background: linear-gradient(90deg, #0f172a 0%, #c5a022 50%, #1e3a5f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 6px rgba(197, 160, 34, 0.4));
+}
+
+/* ─── Sidebar ───────────────────────────────────────────────── */
+html:not(.dark) .sidebar-aside {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-right-color: rgba(0, 0, 0, 0.10) !important;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::selection {
+  background: rgba(197, 160, 34, 0.3);
+  color: #c5a022;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c5a022 transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c5a022;
+  border-radius: 10px;
+}
+
+/* ─── Tables ────────────────────────────────────────────────── */
+html:not(.dark) table thead tr {
+  color: var(--color-text-muted);
+}
+
+html:not(.dark) table tbody tr:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* ─── Text & Label Utility ──────────────────────────────────── */
+.text-adaptive {
+  color: var(--color-text);
+}
+
+.text-adaptive-muted {
+  color: var(--color-text-muted);
+}
+
+/* ─── Light Mode Typography Enhancements ────────────────────── */
+html:not(.dark) h1,
+html:not(.dark) h2,
+html:not(.dark) h3 {
+  color: #0f172a;
+}
+
+html:not(.dark) p,
+html:not(.dark) span,
+html:not(.dark) td,
+html:not(.dark) th,
+html:not(.dark) li {
+  color: #1e293b;
+}
+
+html:not(.dark) .text-slate-400,
+html:not(.dark) .text-slate-500 {
+  color: #64748b !important;
+}
+
+html:not(.dark) .glass-card {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+html:not(.dark) .text-secondary {
+  color: #9a7310 !important;
+}
