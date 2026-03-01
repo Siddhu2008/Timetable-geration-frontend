@@ -28,13 +28,13 @@ export default function TimetableGrid({ entries, slots, subjects, teachers, room
           <thead>
             <tr className="bg-white/5 backdrop-blur-md">
               <th className="sticky left-0 z-20 bg-[#0d1b2a] p-4 font-heading text-lg font-bold text-secondary shadow-[2px_0_10px_rgba(0,0,0,0.3)]">
-                Formation
+                Class
               </th>
               {sortedSlots.map((s) => (
                 <th key={s.id} className={`p-4 min-w-[140px] border-l border-white/5 ${s.is_break ? "bg-amber-500/10" : ""}`}>
                   <div className="text-xs font-bold uppercase tracking-widest text-slate-500">{s.day_of_week}</div>
                   <div className="mt-1 font-heading text-secondary">{`${s.start_time} - ${s.end_time}`}</div>
-                  {s.is_break && <div className="mt-1 text-[10px] font-black text-amber-500 uppercase tracking-tighter">Interlude</div>}
+                  {s.is_break && <div className="mt-1 text-[10px] font-black text-amber-500 uppercase tracking-tighter">Break</div>}
                 </th>
               ))}
             </tr>
@@ -60,7 +60,7 @@ export default function TimetableGrid({ entries, slots, subjects, teachers, room
                     >
                       {slot.is_break ? (
                         <div className="flex h-20 items-center justify-center rounded-xl border border-dashed border-amber-500/20 text-[10px] font-bold uppercase text-amber-500/40">
-                          Respite
+                          Break
                         </div>
                       ) : entry ? (
                         <motion.div
@@ -84,7 +84,7 @@ export default function TimetableGrid({ entries, slots, subjects, teachers, room
                         </motion.div>
                       ) : (
                         <div className="h-20 rounded-xl border border-dashed border-white/5 bg-white/[0.02] flex items-center justify-center transition-colors hover:bg-white/[0.05]">
-                          <span className="text-[10px] font-bold text-white/10 uppercase tracking-widest">Available</span>
+                          <span className="text-[10px] font-bold text-white/10 uppercase tracking-widest">Free Slot</span>
                         </div>
                       )}
                     </td>

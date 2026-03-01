@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 
 const navItems = [
-    { id: "dashboard", label: "Overview", icon: "🏠", path: "/admin/dashboard", roles: ["admin"] },
+    { id: "dashboard", label: "Dashboard", icon: "🏠", path: "/admin/dashboard", roles: ["admin"] },
     { id: "teachers", label: "Teachers", icon: "👨‍🏫", path: "/admin/teachers", roles: ["admin"] },
     { id: "classes", label: "Classes", icon: "🏫", path: "/admin/classes", roles: ["admin"] },
     { id: "subjects", label: "Subjects", icon: "📚", path: "/admin/subjects", roles: ["admin"] },
@@ -102,7 +102,7 @@ export default function Sidebar({ dark, setDark, mobile = false }) {
                         color: "var(--color-text-muted)",
                     }}
                 >
-                    <span>{dark ? "Light Oracle" : "Deep Night"}</span>
+                    <span>{dark ? "Light Mode" : "Dark Mode"}</span>
                     <span>{dark ? "☀️" : "🌙"}</span>
                 </button>
 
@@ -110,7 +110,7 @@ export default function Sidebar({ dark, setDark, mobile = false }) {
                     onClick={logout}
                     className="btn w-full !px-2 !py-2 text-[10px] shadow-none"
                 >
-                    Relinquish Access
+                    Log Out
                 </button>
             </div>
         </aside>
