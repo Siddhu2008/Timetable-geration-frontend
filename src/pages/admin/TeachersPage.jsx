@@ -14,17 +14,20 @@ export default function TeachersPage() {
   const [teachers, setTeachers] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [mappings, setMappings] = useState([]);
+  const [neededSubstitutes, setNeededSubstitutes] = useState([]);
+  const [subAssignment, setSubAssignment] = useState({}); // entry_id -> target_teacher_id
   const [form, setForm] = useState(EMPTY);
   const bulkFileRef = useRef(null);
   const { showLoader, hideLoader, toast } = useUi();
 
   const load = async () => {
-    const [t, s, m] = await Promise.all([
+    const [t, s, m, subReqs] = await Promise.all([
       client.get("/teachers"),
       client.get("/subjects"),
       client.get("/teacher-subjects"),
+      client.get("/timetable/substitutes/needed").catch(() => ({ data: [] })),
     ]);
-    setTeachers(t.data); setSubjects(s.data); setMappings(m.data);
+    setTeachers(t.data); setSubjects(s.data); setMappings(m.data); setNeededSubstitutes(subReqs.data);
   };
 
   useEffect(() => {
@@ -98,6 +101,18 @@ export default function TeachersPage() {
     finally { hideLoader(); }
   };
 
+  const assignSubstitute = async (entryId) => {
+    const targetDid = subAssignment[entryId];
+    if (!targetDid) { toast("Select a substitute first", "warning"); return; }
+    showLoader("Assigning substitute...");
+    try {
+      await client.post("/timetable/substitutes/assign", { entry_id: entryId, substitute_teacher_id: Number(targetDid) });
+      toast("Substitute assigned. Schedule updated.", "success");
+      await load();
+    } catch { toast("Failed to assign substitute", "error"); }
+    finally { hideLoader(); }
+  };
+
   return (
     <div className="space-y-10">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -115,6 +130,47 @@ export default function TeachersPage() {
           </button>
         </div>
       </div>
+
+      {neededSubstitutes.length > 0 && (
+        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="glass-card overflow-hidden border-rose-500/20 bg-rose-500/5">
+          <div className="border-b border-rose-500/10 px-6 py-4 flex items-center gap-3">
+            <span className="text-xl">⚠️</span>
+            <h3 className="font-heading text-lg font-bold text-rose-400">Absences Detected: Substitutes Required</h3>
+          </div>
+          <div className="p-6 space-y-4">
+            {neededSubstitutes.map(sub => (
+              <div key={sub.entry_id} className="flex flex-col md:flex-row md:items-center justify-between gap-4 rounded-xl border border-white/5 bg-white/5 p-4">
+                <div>
+                  <div className="text-sm font-bold text-slate-300">
+                    <span className="text-rose-400">{sub.absent_teacher_name}</span> is absent for <span className="text-secondary">{sub.subject_name}</span> ({sub.class_name})
+                  </div>
+                  <div className="text-[11px] font-black uppercase tracking-widest text-slate-500 mt-1">
+                    {sub.day}, {sub.time}
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 w-full md:w-auto">
+                  <select
+                    className="input !py-2 !text-xs flex-1 md:w-48"
+                    value={subAssignment[sub.entry_id] || ""}
+                    onChange={(e) => setSubAssignment(prev => ({ ...prev, [sub.entry_id]: e.target.value }))}
+                  >
+                    <option value="">Select Substitute...</option>
+                    {sub.available_substitutes.map(avail => (
+                      <option key={avail.id} value={avail.id}>{avail.name}</option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={() => assignSubstitute(sub.entry_id)}
+                    className="btn !py-2 !px-4 !text-xs whitespace-nowrap"
+                  >
+                    Assign
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
 
       <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="glass-card relative p-0 overflow-hidden">
         <div className="absolute left-0 top-0 h-1.5 w-full bg-gradient-to-r from-transparent via-secondary/30 to-transparent" />
