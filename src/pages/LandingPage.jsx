@@ -1,7 +1,7 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function LandingPage() {
     const { user } = useAuth();
@@ -22,120 +22,74 @@ export default function LandingPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white selection:bg-secondary/30 selection:text-secondary" ref={targetRef}>
-            {/* ─── Ambient Background ─────────────────────────────────────────── */}
+        <div className="min-h-screen bg-[#050505] text-white selection:bg-secondary/30 selection:text-secondary">
+            {/* ─── Static Background ─────────────────────────────────────────── */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-                <motion.div
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.1, 0.15, 0.1],
-                    }}
-                    transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-secondary/20 blur-[140px]"
-                />
-                <motion.div
-                    animate={{
-                        scale: [1, 1.3, 1],
-                        opacity: [0.1, 0.2, 0.1],
-                    }}
-                    transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                    className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-blue-600/10 blur-[140px]"
-                />
-
-                {/* Floating 3D-like elements */}
-                <FloatingElement icon="📅" className="top-[15%] left-[10%] animate-float-slow opacity-20 text-6xl" />
-                <FloatingElement icon="⏰" className="top-[60%] right-[15%] animate-float opacity-15 text-7xl" delay={1} />
-                <FloatingElement icon="📚" className="bottom-[20%] left-[20%] animate-float-slow opacity-10 text-5xl" delay={2} />
-                <FloatingElement icon="⚡" className="top-[40%] left-[80%] animate-float opacity-20 text-4xl text-secondary" delay={0.5} />
+                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-secondary/5 blur-[120px]" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-blue-900/5 blur-[120px]" />
             </div>
 
             {/* ─── Navigation ───────────────────────────────────────────────── */}
-            <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#050505]/60 backdrop-blur-xl border-b border-white/5">
+            <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#050505]/80 backdrop-blur-xl border-b border-white/5">
                 <div className="max-w-7xl mx-auto flex items-center justify-between px-8 py-5">
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="flex items-center gap-3"
-                    >
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-gold-dark flex items-center justify-center text-xl shadow-[0_0_20px_rgba(197,160,34,0.4)]">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-gold-dark flex items-center justify-center text-xl shadow-[0_0_20px_rgba(197,160,34,0.3)]">
                             ⚡
                         </div>
                         <span className="font-heading text-xl font-black tracking-tighter">
                             Smart<span className="text-secondary">Timetable</span>
                         </span>
-                    </motion.div>
+                    </div>
 
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="flex items-center gap-8"
-                    >
-                        <Link to="/login" className="text-sm font-bold text-slate-400 hover:text-white transition-all hover:tracking-widest">LOGIN</Link>
+                    <div className="flex items-center gap-8">
+                        <Link to="/login" className="text-sm font-bold text-slate-400 hover:text-white transition-all">LOGIN</Link>
                         <Link to="/register" className="btn !py-2.5 !px-8 text-[11px] font-black tracking-[0.1em]">GET STARTED</Link>
-                    </motion.div>
+                    </div>
                 </div>
             </nav>
 
             {/* ─── Hero Section ─────────────────────────────────────────────── */}
             <main className="relative z-10 pt-48 pb-32 px-8">
-                <motion.div
-                    style={{ opacity, scale }}
-                    className="flex flex-col items-center text-center max-w-5xl mx-auto"
-                >
+                <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-secondary/20 bg-secondary/5 text-[10px] font-black uppercase tracking-[0.3em] text-secondary mb-10 shadow-[0_0_40px_rgba(197,160,34,0.1)]"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-[0.3em] text-secondary mb-10"
                     >
-                        <span className="relative flex h-2.5 w-2.5">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary"></span>
-                        </span>
                         2026 EDITION • AI-FIRST SCHEDULING
                     </motion.div>
 
-                    <div className="relative">
-                        {/* Center Glow */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-secondary/10 blur-[100px] pointer-events-none" />
-
-                        <motion.h1
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className="font-heading text-7xl md:text-[9rem] font-black tracking-tighter mb-10 leading-[0.85] uppercase"
-                        >
-                            <span className="text-white">Effortless</span> <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-gold-dark to-secondary animate-gradient-x py-2 drop-shadow-[0_0_30px_rgba(197,160,34,0.3)]">
-                                Academic
-                            </span> <br />
-                            <span className="text-white">Scheduling.</span>
-                        </motion.h1>
-                    </div>
+                    <motion.h1
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="font-heading text-7xl md:text-[8rem] font-black tracking-tighter mb-10 leading-[0.9] text-white uppercase"
+                    >
+                        Effortless <br />
+                        <span className="text-secondary">
+                            Academic
+                        </span> <br />
+                        Scheduling.
+                    </motion.h1>
 
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-slate-400 text-lg md:text-2xl max-w-3xl mb-16 leading-relaxed font-medium"
+                        transition={{ delay: 0.1 }}
+                        className="text-slate-300 text-lg md:text-xl max-w-3xl mb-16 leading-relaxed font-medium"
                     >
                         Master the complex puzzle of institutional scheduling.
-                        Our neural engine resolves thousands of constraints in milliseconds.
+                        Our engine resolves thousands of constraints in seconds.
                     </motion.p>
 
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className="flex flex-wrap items-center justify-center gap-6"
-                    >
-                        <Link to="/register" className="btn !px-12 !py-6 text-xl shadow-[0_30px_60px_rgba(197,160,34,0.4)] hover:shadow-[0_40px_80px_rgba(197,160,34,0.5)]">
+                    <div className="flex flex-wrap items-center justify-center gap-6">
+                        <Link to="/register" className="btn !px-12 !py-6 text-xl shadow-lg">
                             START GENERATING FREE
                         </Link>
-                        <Link to="/login" className="btn-secondary !px-12 !py-6 text-xl border-white/10 hover:bg-white/5 backdrop-blur-md">
+                        <Link to="/login" className="btn-secondary !px-12 !py-6 text-xl border-white/20 hover:bg-white/5 backdrop-blur-md">
                             ADMIN PORTAL
                         </Link>
-                    </motion.div>
-                </motion.div>
+                    </div>
+                </div>
 
                 {/* ─── Trust Bar ─────────────────────────────────────────────── */}
                 <motion.div
@@ -239,19 +193,6 @@ export default function LandingPage() {
     );
 }
 
-function FloatingElement({ icon, className, delay = 0 }) {
-    return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay, duration: 2 }}
-            className={`absolute pointer-events-none select-none ${className}`}
-        >
-            {icon}
-        </motion.div>
-    );
-}
-
 function FeatureCard({ title, desc, icon, color, index }) {
     return (
         <motion.div
@@ -261,12 +202,12 @@ function FeatureCard({ title, desc, icon, color, index }) {
             transition={{ delay: 0.1 * index }}
             className={`glass-card-premium p-12 group relative overflow-hidden border-white/5 hover:border-secondary/20 transition-all duration-500`}
         >
-            <div className="absolute -right-4 -top-4 text-9xl opacity-[0.02] group-hover:opacity-[0.06] transition-opacity duration-700 grayscale">
+            <div className="absolute -right-4 -top-4 text-9xl opacity-[0.02] group-hover:opacity-[0.1] transition-opacity duration-700 grayscale">
                 {icon}
             </div>
-            <div className="text-5xl mb-8 group-hover:scale-110 transition-transform duration-500">{icon}</div>
-            <h3 className="font-heading text-3xl font-black mb-5 uppercase tracking-tighter">{title}</h3>
-            <p className="text-slate-400 leading-relaxed text-lg font-medium">{desc}</p>
+            <div className="text-5xl mb-8">{icon}</div>
+            <h3 className="font-heading text-3xl font-black mb-5 uppercase tracking-tighter text-white">{title}</h3>
+            <p className="text-slate-300 leading-relaxed text-lg font-medium">{desc}</p>
 
             {/* Corner Glow */}
             <div className={`absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-br ${color} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
@@ -278,7 +219,7 @@ function StatItem({ value, label }) {
     return (
         <div className="space-y-2">
             <h4 className="text-5xl md:text-6xl font-black text-secondary tracking-tighter">{value}</h4>
-            <div className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">{label}</div>
+            <div className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">{label}</div>
         </div>
     );
 }
@@ -287,12 +228,12 @@ function RoleCard({ role, features, icon, color }) {
     return (
         <div className={`glass-card-premium p-10 border-white/5 hover:${color} transition-all duration-500 group`}>
             <div className="flex items-center gap-5 mb-8">
-                <div className="text-4xl group-hover:rotate-12 transition-transform">{icon}</div>
-                <h3 className="font-heading text-2xl font-black uppercase tracking-tighter">{role}</h3>
+                <div className="text-4xl">{icon}</div>
+                <h3 className="font-heading text-2xl font-black uppercase tracking-tighter text-white">{role}</h3>
             </div>
             <ul className="space-y-5">
                 {features.map((f, i) => (
-                    <li key={i} className="flex items-center gap-4 text-slate-400 text-base font-medium">
+                    <li key={i} className="flex items-center gap-4 text-slate-300 text-base font-medium">
                         <span className="text-secondary text-lg">✓</span> {f}
                     </li>
                 ))}
