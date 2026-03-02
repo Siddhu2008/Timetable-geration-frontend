@@ -18,6 +18,7 @@ import SubjectsPage from "./pages/admin/SubjectsPage";
 import RoomsPage from "./pages/admin/RoomsPage";
 import TimetablePage from "./pages/admin/TimetablePage";
 import SettingsPage from "./pages/admin/SettingsPage";
+import LandingPage from "./pages/LandingPage";
 
 export default function App() {
   const { user } = useAuth();
@@ -35,10 +36,14 @@ export default function App() {
           transition={{ duration: 0.3 }}
         >
           <Routes location={location}>
+            {/* Public Routes */}
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
 
+            {/* Protected Routes inside AppLayout */}
             <Route element={<ProtectedRoute roles={["admin", "teacher", "student"]}><AppLayout /></ProtectedRoute>}>
+              {/* Admin Routes */}
               <Route path="/admin/dashboard" element={<ProtectedRoute roles={["admin"]}><DashboardPage /></ProtectedRoute>} />
               <Route path="/admin/teachers" element={<ProtectedRoute roles={["admin"]}><TeachersPage /></ProtectedRoute>} />
               <Route path="/admin/classes" element={<ProtectedRoute roles={["admin"]}><ClassesPage /></ProtectedRoute>} />
@@ -47,17 +52,14 @@ export default function App() {
               <Route path="/admin/timetable" element={<ProtectedRoute roles={["admin"]}><TimetablePage /></ProtectedRoute>} />
               <Route path="/admin/settings" element={<ProtectedRoute roles={["admin"]}><SettingsPage /></ProtectedRoute>} />
 
+              {/* Teacher Routes */}
               <Route path="/teacher" element={<ProtectedRoute roles={["teacher"]}><TeacherPage /></ProtectedRoute>} />
 
+              {/* Student Routes */}
               <Route path="/student" element={<ProtectedRoute roles={["student"]}><StudentPage /></ProtectedRoute>} />
-
-              <Route path="/" element={
-                user?.role === "admin" ? <Navigate to="/admin/dashboard" replace /> :
-                  user?.role === "teacher" ? <Navigate to="/teacher" replace /> :
-                    <Navigate to="/student" replace />
-              } />
             </Route>
 
+            {/* Catch-all redirect to Landing */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </motion.div>
