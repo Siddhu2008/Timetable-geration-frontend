@@ -99,6 +99,11 @@ html:not(.dark) body {
   perspective: 1000px;
 }
 
+.glass-card-premium {
+  @apply glass-card bg-white/[0.02] border-white/5;
+  box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
 .glass-card:hover {
   border-color: var(--color-border-hover);
   transform: translateY(-4px) scale(1.005);
@@ -197,4 +202,54 @@ html:not(.dark) .glass-card {
 
 html:not(.dark) .text-secondary {
   color: #9a7310 !important;
+}
+
+/* ─── Animations ────────────────────────────────────────────── */
+@keyframes gradient-x {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 6s ease infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+
+@keyframes float-slow {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+
+  50% {
+    transform: translateY(-40px) rotate(5deg);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 12s ease-in-out infinite;
 }
