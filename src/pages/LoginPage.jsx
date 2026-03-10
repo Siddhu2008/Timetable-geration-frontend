@@ -7,7 +7,7 @@ import client from "../api/client";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("admin");
-  const [password, setPassword] = useState("adimn");
+  const [password, setPassword] = useState("admin");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
@@ -37,8 +37,8 @@ export default function LoginPage() {
     try {
       await client.post("/auth/seed-admin");
       setUsername("admin");
-      setPassword("adimn");
-      setInfo("Admin credentials reset: admin / adimn");
+      setPassword("admin");
+      setInfo("Admin credentials reset: admin / admin");
       toast("Admin credentials reset", "success");
     } catch {
       setError("Could not reset admin credentials. Make sure backend is running.");
@@ -74,7 +74,7 @@ export default function LoginPage() {
               transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
             >
               <div className="flex h-32 w-32 items-center justify-center rounded-3xl border border-white/20 bg-white/5 text-6xl shadow-2xl backdrop-blur-xl">
-                📚
+                <span role="img" aria-label="Books">📚</span>
               </div>
             </motion.div>
           </motion.div>
@@ -125,7 +125,7 @@ export default function LoginPage() {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 transition-colors hover:text-secondary"
                     onClick={() => setShowPassword((v) => !v)}
                   >
-                    {showPassword ? "👁️" : "🙈"}
+                    {showPassword ? <span role="img" aria-label="Hide password">👁️</span> : <span role="img" aria-label="Show password">🙈</span>}
                   </button>
                 </div>
               </div>
@@ -133,7 +133,7 @@ export default function LoginPage() {
               {error && <p className="rounded-lg bg-red-500/10 p-3 text-sm text-red-400 border border-red-500/20">{error}</p>}
               {info && <p className="rounded-lg bg-emerald-500/10 p-3 text-sm text-emerald-400 border border-emerald-500/20">{info}</p>}
 
-              <button className="btn w-full">Sign In to Dashboard</button>
+              <button type="submit" className="btn w-full">Sign In to Dashboard</button>
 
               <button
                 type="button"

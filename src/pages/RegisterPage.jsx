@@ -8,6 +8,7 @@ import { useUi } from "../context/UiContext";
 export default function RegisterPage() {
   const [role, setRole] = useState("student");
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [classId, setClassId] = useState("");
   const [name, setName] = useState("");
@@ -36,7 +37,9 @@ export default function RegisterPage() {
     setOk("");
     showLoader("Forging Credentials...");
     try {
-      const payload = { username, password, role };
+      // Basic XSS Sanitization for username
+      const sanitizedUsername = username.replace(/<[^>]*>?/gm, '');
+      const payload = { username: sanitizedUsername, email, password, role };
       if (role === "student") payload.class_id = Number(classId);
       if (role === "teacher") payload.name = name || username;
       await register(payload);
@@ -80,7 +83,7 @@ export default function RegisterPage() {
               transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
             >
               <div className="flex h-32 w-32 items-center justify-center rounded-3xl border border-white/20 bg-white/5 text-6xl shadow-2xl backdrop-blur-xl">
-                🌌
+                <span role="img" aria-label="Galaxy">🌌</span>
               </div>
             </motion.div>
           </motion.div>
@@ -106,7 +109,7 @@ export default function RegisterPage() {
             <div className="space-y-5">
 
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-secondary">Designation</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-secondary">Academic Role</label>
                 <select className="input w-full" value={role} onChange={(e) => setRole(e.target.value)}>
                   <option value="student" className="bg-[#050a14]">Student Scholar</option>
                   <option value="teacher" className="bg-[#050a14]">Faculty Overseer</option>
@@ -122,6 +125,18 @@ export default function RegisterPage() {
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="Identify yourself"
                   required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-widest text-secondary">Email Address</label>
+                <input
+                  className="input w-full"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="matrix@academy.edu"
                 />
               </div>
 
@@ -173,7 +188,7 @@ export default function RegisterPage() {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 transition-colors hover:text-secondary"
                     onClick={() => setShowPassword((v) => !v)}
                   >
-                    {showPassword ? "👁️" : "🙈"}
+                    {showPassword ? <span role="img" aria-label="Hide password">👁️</span> : <span role="img" aria-label="Show password">🙈</span>}
                   </button>
                 </div>
               </div>

@@ -5,7 +5,7 @@ import "./LandingPage.css";
 
 export default function LandingPage() {
   const { user } = useAuth();
-  
+
   // Redirect if already logged in
   if (user) {
     if (user.role === "admin") return <Navigate to="/admin/dashboard" replace />;
@@ -97,18 +97,18 @@ export default function LandingPage() {
             <motion.div className="hero-badge">
               ✨ The Future of Academic Scheduling
             </motion.div>
-            
+
             <h1 className="hero-title">
-              <span style={{color:"#5954a0"}}>Schedule Your Future with</span>
+              <span style={{ color: "#5954a0" }}>Schedule Your Future with</span>
               <span className="hero-title-gradient">
                 AI Intelligence
               </span>
             </h1>
-            
-            <p className="hero-description" style={{color:"#8aa4c7"}}>
+
+            <p className="hero-description" style={{ color: "#8aa4c7" }}>
               Transform your institution's timetable management with our AI-powered scheduling platform. Save hours, eliminate conflicts, and keep everyone connected.
             </p>
-            
+
             <motion.div
               className="hero-buttons"
               initial={{ opacity: 0, scale: 0.8 }}
@@ -130,7 +130,7 @@ export default function LandingPage() {
             animate={{ y: [0, 20, 0] }}
             transition={{ duration: 4, repeat: Infinity }}
           >
-            📅
+            <span role="img" aria-label="Calendar">📅</span>
           </motion.div>
         </div>
       </section>
@@ -144,7 +144,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className="section-title"
-            style={{color:"#738fb4"}}
+            style={{ color: "#738fb4" }}
           >
             Powerful Features Built for You
           </motion.h2>
@@ -167,9 +167,9 @@ export default function LandingPage() {
               >
                 <div className="feature-card-bg" />
                 <div className="feature-card-content" >
-                  <div className="feature-card-icon">{feature.icon}</div>
-                  <h3 className="feature-card-title" style={{color:"#8aa4c7"}}>{feature.title}</h3>
-                  <p className="feature-card-desc" style={{color:"#485d79"}}>{feature.desc}</p>
+                  <div className="feature-card-icon" role="img" aria-label={feature.title}>{feature.icon}</div>
+                  <h3 className="feature-card-title" style={{ color: "#8aa4c7" }}>{feature.title}</h3>
+                  <p className="feature-card-desc" style={{ color: "#485d79" }}>{feature.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -186,7 +186,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className="section-title"
-            style={{color:"#83ace2"}}
+            style={{ color: "#83ace2" }}
           >
             How It Works
           </motion.h2>
@@ -204,8 +204,8 @@ export default function LandingPage() {
                 <div className="step-number">
                   {step.number}
                 </div>
-                <h3 className="step-title" style={{color:"#8aa4c7"}}>{step.title}</h3>
-                <p className="step-desc" style={{color:"#485d79"}}>{step.desc}</p>
+                <h3 className="step-title" style={{ color: "#8aa4c7" }}>{step.title}</h3>
+                <p className="step-desc" style={{ color: "#485d79" }}>{step.desc}</p>
                 {idx < steps.length - 1 && (
                   <div className="step-arrow">
                     <svg className="arrow-svg" viewBox="0 0 24 24">
@@ -239,7 +239,7 @@ export default function LandingPage() {
                 <div className="stat-number">
                   {item.stat}
                 </div>
-                <p className="stat-label" style={{color:"#65636d"}}>{item.label}</p>
+                <p className="stat-label" style={{ color: "#65636d" }}>{item.label}</p>
               </motion.div>
             ))}
           </div>
@@ -255,7 +255,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className="section-title"
-            style={{color:"#8e8ac7"}}
+            style={{ color: "#8e8ac7" }}
           >
             Loved by Institutions
           </motion.h2>
@@ -275,10 +275,10 @@ export default function LandingPage() {
                     <span key={i} className="star">⭐</span>
                   ))}
                 </div>
-                <p className="testimonial-text" style={{color:"#8aa4c7"}}>"{testimonial.text}"</p>
+                <p className="testimonial-text" style={{ color: "#8aa4c7" }}>"{testimonial.text}"</p>
                 <div>
-                  <p className="testimonial-name" style={{color:"#3e79c5"}}>{testimonial.name}</p>
-                  <p className="testimonial-role" style={{color:"#8aa4c7"}}>{testimonial.role}</p>
+                  <p className="testimonial-name" style={{ color: "#3e79c5" }}>{testimonial.name}</p>
+                  <p className="testimonial-role" style={{ color: "#8aa4c7" }}>{testimonial.role}</p>
                 </div>
               </motion.div>
             ))}
@@ -304,7 +304,7 @@ export default function LandingPage() {
             transition={{ delay: 0.1, duration: 0.8 }}
             viewport={{ once: true }}
             className="cta-description"
-            
+
           >
             Join hundreds of institutions. No credit card required.
           </motion.p>
@@ -321,24 +321,60 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section className="faq-section" style={{ padding: '5rem 0', background: 'var(--color-bg)' }}>
+        <div className="faq-container" style={{ maxWidth: '1200px', margin: '0 auto', px: '2rem' }}>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="section-title text-center"
+            style={{ color: "#8aa4c7", marginBottom: '3rem', textAlign: 'center' }}
+          >
+            Frequently Asked Questions
+          </motion.h2>
+          <div className="faq-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            {[
+              { q: "How does the AI resolve conflicts?", a: "Our algorithm analyzes teacher availability, room capacity, and subject priorities to find the perfect slot for every session." },
+              { q: "Can I export data to Excel?", a: "Yes, once a timetable version is finalized, you can download it as Excel or PDF." },
+              { q: "Is there a mobile app?", a: "The platform is fully responsive and works perfectly on all mobile browsers." },
+              { q: "How secure is my data?", a: "We use royal-grade encryption and cloud sync to ensure your data is always safe and accessible." }
+            ].map((faq, idx) => (
+              <motion.div
+                key={idx}
+                className="faq-item glass-card p-6"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <h3 className="faq-question" style={{ color: "#c5a022", marginBottom: '0.5rem', fontSize: '1.1rem' }}>{faq.q}</h3>
+                <p className="faq-answer" style={{ color: "#8aa4c7", fontSize: '0.95rem' }}>{faq.a}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="footer">
         <div className="footer-content">
-          <div className="footer-grid" style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '2rem', marginBottom: '2rem'}}>
-            <div style={{flex: '1 1 250px'}}>
-              <h3 className="footer-section-title" style={{marginBottom: '1rem', color: '#8e8ac7'}}>SmartTimetable</h3>
-              <p className="footer-section-desc" style={{color: '#8aa4c7', fontSize: '1rem', maxWidth: 320}}>Revolutionizing academic scheduling with AI.</p>
+          <div className="footer-grid" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '2rem', marginBottom: '2rem' }}>
+            <div style={{ flex: '1 1 250px' }}>
+              <h3 className="footer-section-title" style={{ marginBottom: '1rem', color: '#8e8ac7' }}>SmartTimetable</h3>
+              <p className="footer-section-desc" style={{ color: '#8aa4c7', fontSize: '1rem', maxWidth: 320 }}>Revolutionizing academic scheduling with AI.</p>
             </div>
-            <div style={{flex: '1 1 180px', minWidth: 180}}>
-              <h4 className="footer-section-title" style={{marginBottom: '1rem', color: '#8e8ac7'}}>Legal</h4>
-              <ul className="footer-section-links" style={{listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
-                <li><Link to="/privacy-policy" className="footer-section-link" style={{color: '#8aa4c7', textDecoration: 'none', fontSize: '1rem'}}>Privacy Policy</Link></li>
-                <li><Link to="/terms" className="footer-section-link" style={{color: '#8aa4c7', textDecoration: 'none', fontSize: '1rem'}}>Terms & Conditions</Link></li>
-                <li><Link to="/cookies" className="footer-section-link" style={{color: '#8aa4c7', textDecoration: 'none', fontSize: '1rem'}}>Cookies</Link></li>
+            <div style={{ flex: '1 1 180px', minWidth: 180 }}>
+              <h4 className="footer-section-title" style={{ marginBottom: '1rem', color: '#8e8ac7' }}>Legal</h4>
+              <ul className="footer-section-links" style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <li><Link to="/privacy-policy" className="footer-section-link" style={{ color: '#8aa4c7', textDecoration: 'none', fontSize: '1rem' }}>Privacy Policy</Link></li>
+                <li><Link to="/terms" className="footer-section-link" style={{ color: '#8aa4c7', textDecoration: 'none', fontSize: '1rem' }}>Terms & Conditions</Link></li>
+                <li><Link to="/cookies" className="footer-section-link" style={{ color: '#8aa4c7', textDecoration: 'none', fontSize: '1rem' }}>Cookies</Link></li>
               </ul>
             </div>
           </div>
-          <div className="footer-divider" style={{color: '#8aa4c7', borderTop: '1px solid #22304a', paddingTop: '2rem', textAlign: 'center', fontSize: '0.95rem'}}>
+          <div className="footer-divider" style={{ color: '#8aa4c7', borderTop: '1px solid #22304a', paddingTop: '2rem', textAlign: 'center', fontSize: '0.95rem' }}>
             <p>© 2026 Smart Timetable. All rights reserved.</p>
           </div>
         </div>
