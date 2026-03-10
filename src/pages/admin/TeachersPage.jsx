@@ -57,16 +57,11 @@ export default function TeachersPage() {
           name: form.name,
           max_lectures_per_day: Number(form.max_lectures_per_day),
         });
-        // Add new subject mappings
-        for (const sid of form.subjectIds) {
-          await client.post(`/teachers/${editTarget.id}/subjects`, { subject_id: sid });
-        }
+        await client.put(`/teachers/${editTarget.id}/subjects`, { subject_ids: form.subjectIds });
         toast("Teacher updated", "success");
       } else {
         const { data } = await client.post("/teachers", { name: form.name, max_lectures_per_day: Number(form.max_lectures_per_day) });
-        for (const sid of form.subjectIds) {
-          await client.post(`/teachers/${data.id}/subjects`, { subject_id: sid });
-        }
+        await client.put(`/teachers/${data.id}/subjects`, { subject_ids: form.subjectIds });
         toast("Teacher added", "success");
       }
       setOpen(false); setForm(EMPTY); await load();
