@@ -1,0 +1,59 @@
+/* Shared color and background for all pages to match LandingPage */
+.page-theme-bg {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #0f172a, #0f1419, #0f172a);
+  color: #8aa4c7;
+}
+
+.page-theme-header {
+  color: #3e79c5;
+  font-weight: bold;
+}
+
+.page-theme-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(71, 85, 105, 1);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.page-theme-label {
+  color: #8aa4c7;
+}
+
+.page-theme-input {
+  background: #181f2f;
+  color: #8aa4c7;
+  border: 1px solid #3e79c5;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.page-theme-btn {
+  background: linear-gradient(to right, #3b82f6, #1e40af);
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.page-theme-btn:hover {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+  transform: scale(1.05);
+}
+
+.page-theme-link {
+  color: #3e79c5;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.page-theme-link:hover {
+  color: #a78bfa;
+}

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useUi } from "../context/UiContext";
+import client from "../api/client";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("admin");
@@ -34,14 +35,13 @@ export default function LoginPage() {
     setError("");
     setInfo("");
     try {
-      const res = await fetch("http://localhost:5000/api/auth/seed-admin", { method: "POST" });
-      if (!res.ok) throw new Error("Failed");
+      await client.post("/auth/seed-admin");
       setUsername("admin");
       setPassword("adimn");
       setInfo("Admin credentials reset: admin / adimn");
       toast("Admin credentials reset", "success");
     } catch {
-      setError("Could not reset admin credentials. Make sure backend is running on port 5000.");
+      setError("Could not reset admin credentials. Make sure backend is running.");
       toast("Could not reset admin credentials", "error");
     }
   };

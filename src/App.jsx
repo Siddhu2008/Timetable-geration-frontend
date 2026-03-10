@@ -19,6 +19,9 @@ import RoomsPage from "./pages/admin/RoomsPage";
 import TimetablePage from "./pages/admin/TimetablePage";
 import SettingsPage from "./pages/admin/SettingsPage";
 import LandingPage from "./pages/LandingPage";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
+import Cookies from "./pages/Cookies";
 
 export default function App() {
   const { user } = useAuth();
@@ -41,6 +44,9 @@ export default function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
 
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/cookies" element={<Cookies />} />
             {/* Protected Routes inside AppLayout */}
             <Route element={<ProtectedRoute roles={["admin", "teacher", "student"]}><AppLayout /></ProtectedRoute>}>
               {/* Admin Routes */}

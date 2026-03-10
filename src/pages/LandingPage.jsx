@@ -1,234 +1,349 @@
-import { motion } from "framer-motion";
 import { Link, Navigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
-import { useState, useEffect } from "react";
+import "./LandingPage.css";
 
 export default function LandingPage() {
-    const { user } = useAuth();
-    // Redirect to dashboard if already logged in
-    if (user) {
-        if (user.role === "admin") return <Navigate to="/admin/dashboard" replace />;
-        if (user.role === "teacher") return <Navigate to="/teacher" replace />;
-        return <Navigate to="/student" replace />;
-    }
+  const { user } = useAuth();
+  
+  // Redirect if already logged in
+  if (user) {
+    if (user.role === "admin") return <Navigate to="/admin/dashboard" replace />;
+    if (user.role === "teacher") return <Navigate to="/teacher" replace />;
+    return <Navigate to="/student" replace />;
+  }
 
-    return (
-        <div className="min-h-screen bg-[#050505] text-white selection:bg-secondary/30 selection:text-secondary">
-            {/* ─── Static Background ─────────────────────────────────────────── */}
-            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-secondary/5 blur-[120px]" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-blue-900/5 blur-[120px]" />
-            </div>
+  const features = [
+    {
+      title: "AI-Powered Scheduling",
+      desc: "Let our intelligent algorithm resolve conflicts and optimize your timetable in seconds.",
+      icon: "🤖",
+      colorClass: "blue",
+    },
+    {
+      title: "Instant Data Import",
+      desc: "Upload classes, teachers, and rooms effortlessly with our smart import system.",
+      icon: "📥",
+      colorClass: "purple",
+    },
+    {
+      title: "Real-time Substitution",
+      desc: "Handle absences instantly with intelligent substitute suggestions.",
+      icon: "⚡",
+      colorClass: "pink",
+    },
+    {
+      title: "Multi-Role Portals",
+      desc: "Personalized dashboards for admins, teachers, and students.",
+      icon: "👥",
+      colorClass: "green",
+    },
+    {
+      title: "Export Everything",
+      desc: "Download schedules as PDF or Excel in seconds.",
+      icon: "📤",
+      colorClass: "orange",
+    },
+    {
+      title: "24/7 Cloud Sync",
+      desc: "Your data is always secure, accessible, and up-to-date.",
+      icon: "☁️",
+      colorClass: "cyan",
+    },
+  ];
 
-            {/* ─── Navigation ───────────────────────────────────────────────── */}
-            <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#050505]/80 backdrop-blur-xl border-b border-white/5">
-                <div className="max-w-7xl mx-auto flex items-center justify-between px-8 py-5">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-gold-dark flex items-center justify-center text-xl shadow-[0_0_20px_rgba(197,160,34,0.3)]">
-                            ⚡
-                        </div>
-                        <span className="font-heading text-xl font-black tracking-tighter">
-                            Smart<span className="text-secondary">Timetable</span>
-                        </span>
-                    </div>
+  const steps = [
+    { number: "1", title: "Upload Data", desc: "Import your institution's data in minutes" },
+    { number: "2", title: "Configure", desc: "Set up constraints and preferences" },
+    { number: "3", title: "Generate", desc: "AI creates an optimal timetable" },
+    { number: "4", title: "Review", desc: "Check and make final adjustments" },
+  ];
 
-                    <div className="flex items-center gap-8">
-                        <Link to="/login" className="text-sm font-bold text-slate-400 hover:text-white transition-all">LOGIN</Link>
-                        <Link to="/register" className="btn !py-2.5 !px-8 text-[11px] font-black tracking-[0.1em]">GET STARTED</Link>
-                    </div>
-                </div>
-            </nav>
+  const testimonials = [
+    { name: "Sarah Johnson", role: "Principal, Tech Academy", text: "Smart Timetable saved us 40 hours of manual scheduling per semester. A game-changer!" },
+    { name: "Ahmed Hassan", role: "Admin, Elite Institute", text: "The AI-powered scheduling is incredibly accurate. No more conflicts or complications." },
+    { name: "Maria Garcia", role: "Coordinator, University", text: "Our students and teachers love the real-time updates. Highly recommended!" },
+  ];
 
-            {/* ─── Hero Section ─────────────────────────────────────────────── */}
-            <main className="relative z-10 pt-48 pb-32 px-8">
-                <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-[0.3em] text-secondary mb-10"
-                    >
-                        2026 EDITION • AI-FIRST SCHEDULING
-                    </motion.div>
+  return (
+    <div className="landing-page">
+      {/* Animated Background */}
+      <div className="animated-bg">
+        <div className="bg-orb bg-orb-1" />
+        <div className="bg-orb bg-orb-2" />
+      </div>
 
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="font-heading text-7xl md:text-[8rem] font-black tracking-tighter mb-10 leading-[0.9] text-white uppercase"
-                    >
-                        Effortless <br />
-                        <span className="text-secondary">
-                            Academic
-                        </span> <br />
-                        Scheduling.
-                    </motion.h1>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="text-slate-300 text-lg md:text-xl max-w-3xl mb-16 leading-relaxed font-medium"
-                    >
-                        Master the complex puzzle of institutional scheduling.
-                        Our engine resolves thousands of constraints in seconds.
-                    </motion.p>
-
-                    <div className="flex flex-wrap items-center justify-center gap-6">
-                        <Link to="/register" className="btn !px-12 !py-6 text-xl shadow-lg">
-                            START GENERATING FREE
-                        </Link>
-                        <Link to="/login" className="btn-secondary !px-12 !py-6 text-xl border-white/20 hover:bg-white/5 backdrop-blur-md">
-                            ADMIN PORTAL
-                        </Link>
-                    </div>
-                </div>
-
-                {/* ─── Trust Bar ─────────────────────────────────────────────── */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    className="mt-40 text-center"
-                >
-                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 mb-10">TRUSTED BY INNOVATIVE INSTITUTIONS</p>
-                    <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
-                        {["ACADEMY", "POLYTECH", "INSTITUTE", "COLLEGE", "UNI"].map(name => (
-                            <span key={name} className="font-heading text-2xl font-black tracking-tighter italic">{name}</span>
-                        ))}
-                    </div>
-                </motion.div>
-
-                {/* ─── Feature Showcase ────────────────────────────────────────── */}
-                <div className="grid md:grid-cols-3 gap-10 mt-48 max-w-7xl mx-auto">
-                    {[
-                        {
-                            title: "AI-Powered Logic",
-                            desc: "Intelligent conflict resolution ensures zero teacher overlaps and optimized room utilization.",
-                            icon: "🧠",
-                            color: "from-purple-500/20"
-                        },
-                        {
-                            title: "6-Step Guided Flow",
-                            desc: "A surgical, step-by-step process that takes you from raw data to active deployment.",
-                            icon: "🛤️",
-                            color: "from-secondary/20"
-                        },
-                        {
-                            title: "Instant Substitution",
-                            desc: "Real-time teacher absence detection with intelligent substitute suggestions.",
-                            icon: "⚡",
-                            color: "from-blue-500/20"
-                        }
-                    ].map((feature, i) => (
-                        <FeatureCard key={i} {...feature} index={i} />
-                    ))}
-                </div>
-
-                {/* ─── Stats Section ───────────────────────────────────────────── */}
-                <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="mt-48 glass-card-premium p-16 grid md:grid-cols-4 gap-12 text-center max-w-7xl mx-auto"
-                >
-                    <StatItem value="99.9%" label="Conflict Detection" />
-                    <StatItem value="< 2s" label="Generation Time" />
-                    <StatItem value="10k+" label="Schedules Active" />
-                    <StatItem value="24/7" label="Cloud Sync" />
-                </motion.div>
-
-                {/* ─── Role Portals ───────────────────────────────────────────── */}
-                <div className="mt-48 space-y-20 max-w-7xl mx-auto">
-                    <div className="text-center space-y-4">
-                        <h2 className="font-heading text-5xl font-black uppercase tracking-tight">Institutional Symmetry</h2>
-                        <p className="text-slate-500 text-xl font-medium">A tailored experience for every member of your faculty.</p>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-8">
-                        <RoleCard
-                            role="Administrators"
-                            features={["Bulk Data Migration", "Advanced Version Control", "Live Substitute Engine"]}
-                            icon="🏰"
-                            color="border-secondary/20"
-                        />
-                        <RoleCard
-                            role="Teachers"
-                            features={["Personal Timeline", "Smart Availability", "Instant Absence Sync"]}
-                            icon="🎓"
-                            color="border-blue-500/20"
-                        />
-                        <RoleCard
-                            role="Students"
-                            features={["Native Schedule View", "Real-time Updates", "Pro Export (PDF/XLS)"]}
-                            icon="🎒"
-                            color="border-emerald-500/20"
-                        />
-                    </div>
-                </div>
-            </main>
-
-            {/* ─── Footer ──────────────────────────────────────────────────── */}
-            <footer className="relative z-10 border-t border-white/5 bg-[#050505]/80 backdrop-blur-2xl py-20 mt-32">
-                <div className="max-w-7xl mx-auto px-8 grid md:grid-cols-3 gap-12 items-center">
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-lg shadow-[0_0_15px_rgba(197,160,34,0.3)] text-black font-black">⚡</div>
-                        <span className="font-heading font-black text-xl tracking-tighter">SmartTimetable</span>
-                    </div>
-                    <p className="text-slate-500 text-sm text-center font-medium">© 2026 SMART TIMETABLE GENERATOR. <br />ENGINEERED FOR EXCELLENCE.</p>
-                    <div className="flex gap-8 justify-end">
-                        <a href="#" className="text-[10px] font-black tracking-widest text-slate-500 hover:text-white transition-colors">PRIVACY</a>
-                        <a href="#" className="text-[10px] font-black tracking-widest text-slate-500 hover:text-white transition-colors">TERMS</a>
-                        <a href="#" className="text-[10px] font-black tracking-widest text-slate-500 hover:text-white transition-colors">CONTACT</a>
-                    </div>
-                </div>
-            </footer>
+      {/* Header */}
+      <header className="header">
+        <div className="header-content">
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="logo">
+            SmartTimetable
+          </motion.div>
+          <nav className="nav-links">
+            <Link to="/login" className="nav-link">Login</Link>
+            <Link to="/register" className="signup-btn">Sign Up</Link>
+          </nav>
         </div>
-    );
-}
+      </header>
 
-function FeatureCard({ title, desc, icon, color, index }) {
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 30 }}
+      {/* Hero Section */}
+      <section className="hero">
+        <div className="hero-container">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.div className="hero-badge">
+              ✨ The Future of Academic Scheduling
+            </motion.div>
+            
+            <h1 className="hero-title">
+              <span style={{color:"#5954a0"}}>Schedule Your Future with</span>
+              <span className="hero-title-gradient">
+                AI Intelligence
+              </span>
+            </h1>
+            
+            <p className="hero-description" style={{color:"#8aa4c7"}}>
+              Transform your institution's timetable management with our AI-powered scheduling platform. Save hours, eliminate conflicts, and keep everyone connected.
+            </p>
+            
+            <motion.div
+              className="hero-buttons"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+            >
+              <Link to="/register" className="btn-primary">
+                Start Free Trial
+              </Link>
+              <Link to="/login" className="btn-secondary">
+                Sign In
+              </Link>
+            </motion.div>
+          </motion.div>
+
+          {/* Hero Illustration */}
+          <motion.div
+            className="hero-emoji"
+            animate={{ y: [0, 20, 0] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          >
+            📅
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="features-section">
+        <div className="features-container">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 * index }}
-            className={`glass-card-premium p-12 group relative overflow-hidden border-white/5 hover:border-secondary/20 transition-all duration-500`}
-        >
-            <div className="absolute -right-4 -top-4 text-9xl opacity-[0.02] group-hover:opacity-[0.1] transition-opacity duration-700 grayscale">
-                {icon}
-            </div>
-            <div className="text-5xl mb-8">{icon}</div>
-            <h3 className="font-heading text-3xl font-black mb-5 uppercase tracking-tighter text-white">{title}</h3>
-            <p className="text-slate-300 leading-relaxed text-lg font-medium">{desc}</p>
+            className="section-title"
+            style={{color:"#738fb4"}}
+          >
+            Powerful Features Built for You
+          </motion.h2>
 
-            {/* Corner Glow */}
-            <div className={`absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-br ${color} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
-        </motion.div>
-    );
-}
-
-function StatItem({ value, label }) {
-    return (
-        <div className="space-y-2">
-            <h4 className="text-5xl md:text-6xl font-black text-secondary tracking-tighter">{value}</h4>
-            <div className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">{label}</div>
+          <motion.div
+            className="features-grid"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ staggerChildren: 0.2, delayChildren: 0.3 }}
+            viewport={{ once: true }}
+          >
+            {features.map((feature, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+                className={`feature-card feature-${feature.colorClass}`}
+              >
+                <div className="feature-card-bg" />
+                <div className="feature-card-content" >
+                  <div className="feature-card-icon">{feature.icon}</div>
+                  <h3 className="feature-card-title" style={{color:"#8aa4c7"}}>{feature.title}</h3>
+                  <p className="feature-card-desc" style={{color:"#485d79"}}>{feature.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
-    );
+      </section>
+
+      {/* How It Works */}
+      <section className="how-it-works">
+        <div className="how-it-works-container">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="section-title"
+            style={{color:"#83ace2"}}
+          >
+            How It Works
+          </motion.h2>
+
+          <div className="steps-grid">
+            {steps.map((step, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.15, duration: 0.6 }}
+                viewport={{ once: true }}
+                className="step-card"
+              >
+                <div className="step-number">
+                  {step.number}
+                </div>
+                <h3 className="step-title" style={{color:"#8aa4c7"}}>{step.title}</h3>
+                <p className="step-desc" style={{color:"#485d79"}}>{step.desc}</p>
+                {idx < steps.length - 1 && (
+                  <div className="step-arrow">
+                    <svg className="arrow-svg" viewBox="0 0 24 24">
+                      <path d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="stats-section">
+        <div className="stats-container">
+          <div className="stats-grid">
+            {[
+              { stat: "10,000+", label: "Active Schedules" },
+              { stat: "99.9%", label: "Accuracy Rate" },
+              { stat: "<2s", label: "Generation Time" },
+            ].map((item, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, scale: 0.5 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: idx * 0.2, duration: 0.6 }}
+                viewport={{ once: true }}
+                className="stat-item"
+              >
+                <div className="stat-number">
+                  {item.stat}
+                </div>
+                <p className="stat-label" style={{color:"#65636d"}}>{item.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="testimonials-section">
+        <div className="testimonials-container">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="section-title"
+            style={{color:"#8e8ac7"}}
+          >
+            Loved by Institutions
+          </motion.h2>
+
+          <div className="testimonials-grid">
+            {testimonials.map((testimonial, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.15, duration: 0.6 }}
+                viewport={{ once: true }}
+                className="testimonial-card"
+              >
+                <div className="stars">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="star">⭐</span>
+                  ))}
+                </div>
+                <p className="testimonial-text" style={{color:"#8aa4c7"}}>"{testimonial.text}"</p>
+                <div>
+                  <p className="testimonial-name" style={{color:"#3e79c5"}}>{testimonial.name}</p>
+                  <p className="testimonial-role" style={{color:"#8aa4c7"}}>{testimonial.role}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="cta-section">
+        <div className="cta-content">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="cta-title"
+          >
+            Ready to Transform Your Scheduling?
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.8 }}
+            viewport={{ once: true }}
+            className="cta-description"
+            
+          >
+            Join hundreds of institutions. No credit card required.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <Link to="/register" className="cta-button">
+              Get Started Today
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="footer-content">
+          <div className="footer-grid" style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '2rem', marginBottom: '2rem'}}>
+            <div style={{flex: '1 1 250px'}}>
+              <h3 className="footer-section-title" style={{marginBottom: '1rem', color: '#8e8ac7'}}>SmartTimetable</h3>
+              <p className="footer-section-desc" style={{color: '#8aa4c7', fontSize: '1rem', maxWidth: 320}}>Revolutionizing academic scheduling with AI.</p>
+            </div>
+            <div style={{flex: '1 1 180px', minWidth: 180}}>
+              <h4 className="footer-section-title" style={{marginBottom: '1rem', color: '#8e8ac7'}}>Legal</h4>
+              <ul className="footer-section-links" style={{listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
+                <li><Link to="/privacy-policy" className="footer-section-link" style={{color: '#8aa4c7', textDecoration: 'none', fontSize: '1rem'}}>Privacy Policy</Link></li>
+                <li><Link to="/terms" className="footer-section-link" style={{color: '#8aa4c7', textDecoration: 'none', fontSize: '1rem'}}>Terms & Conditions</Link></li>
+                <li><Link to="/cookies" className="footer-section-link" style={{color: '#8aa4c7', textDecoration: 'none', fontSize: '1rem'}}>Cookies</Link></li>
+              </ul>
+            </div>
+          </div>
+          <div className="footer-divider" style={{color: '#8aa4c7', borderTop: '1px solid #22304a', paddingTop: '2rem', textAlign: 'center', fontSize: '0.95rem'}}>
+            <p>© 2026 Smart Timetable. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
 }
 
-function RoleCard({ role, features, icon, color }) {
-    return (
-        <div className={`glass-card-premium p-10 border-white/5 hover:${color} transition-all duration-500 group`}>
-            <div className="flex items-center gap-5 mb-8">
-                <div className="text-4xl">{icon}</div>
-                <h3 className="font-heading text-2xl font-black uppercase tracking-tighter text-white">{role}</h3>
-            </div>
-            <ul className="space-y-5">
-                {features.map((f, i) => (
-                    <li key={i} className="flex items-center gap-4 text-slate-300 text-base font-medium">
-                        <span className="text-secondary text-lg">✓</span> {f}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-}
