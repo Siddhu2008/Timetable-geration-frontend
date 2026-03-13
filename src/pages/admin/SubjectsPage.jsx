@@ -4,7 +4,7 @@ import client from "../../api/client";
 import Modal from "../../components/Modal";
 import { useUi } from "../../context/UiContext";
 
-const EMPTY = { name: "", class_id: "", lectures_per_week: 4, priority_morning: false, is_lab: false };
+const EMPTY = { name: "", class_ids: [], lectures_per_week: 4, priority_morning: false, is_lab: false };
 
 export default function SubjectsPage() {
   const [open, setOpen] = useState(false);
@@ -34,14 +34,38 @@ export default function SubjectsPage() {
   const openCreate = () => { setEditTarget(null); setForm(EMPTY); setOpen(true); };
   const openEdit = (s) => {
     setEditTarget(s);
-    setForm({ name: s.name, class_id: String(s.class_id), lectures_per_week: s.lectures_per_week, priority_morning: s.priority_morning, is_lab: s.is_lab });
+    setForm({
+      name: s.name,
+      class_ids: s.class_ids?.length ? s.class_ids.map(String) : (s.class_id ? [String(s.class_id)] : []),
+      lectures_per_week: s.lectures_per_week,
+      priority_morning: s.priority_morning,
+      is_lab: s.is_lab,
+    });
     setOpen(true);
   };
 
+  const toggleClassId = (id) => {
+    const sid = String(id);
+    setForm((prev) => ({
+      ...prev,
+      class_ids: prev.class_ids.includes(sid)
+        ? prev.class_ids.filter((x) => x !== sid)
+        : [...prev.class_ids, sid],
+    }));
+  };
+
   const save = async () => {
+    if (!form.class_ids.length) { toast("Select at least one class", "warning"); return; }
     showLoader(editTarget ? "Updating subject..." : "Adding subject...");
     try {
-      const payload = { ...form, class_id: Number(form.class_id), lectures_per_week: Number(form.lectures_per_week) };
+      const payload = {
+        name: form.name,
+        class_id: Number(form.class_ids[0]),  // primary class (backward compat)
+        class_ids: form.class_ids.map(Number),
+        lectures_per_week: Number(form.lectures_per_week),
+        priority_morning: form.priority_morning,
+        is_lab: form.is_lab,
+      };
       if (editTarget) {
         await client.put(`/subjects/${editTarget.id}`, payload);
         toast("Subject updated", "success");
@@ -96,8 +120,8 @@ export default function SubjectsPage() {
     <div className="space-y-10">
       <div className="flex items-center justify-between">
         <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
-          <h2 className="royal-header font-heading text-4xl font-bold tracking-tight">Academic Curriculum</h2>
-          <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>Define the core units of knowledge and their frequencies.</p>
+          <h2 className="royal-header font-heading text-4xl font-bold tracking-tight">Subjects</h2>
+          <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>Manage subjects and assign them to one or more classes.</p>
         </motion.div>
         <div className="flex flex-wrap gap-3">
           <button className="btn-secondary text-sm px-5 py-2.5 flex items-center gap-2" onClick={() => setBulkOpen(true)}>📤 Bulk Upload</button>
@@ -115,45 +139,52 @@ export default function SubjectsPage() {
             <thead>
               <tr className="border-b text-[10px] font-black uppercase tracking-[0.2em]" style={{ borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}>
                 <th className="pb-6">Subject Name</th>
-                <th className="pb-6">Class</th>
+                <th className="pb-6">Classes</th>
                 <th className="pb-6 text-center">Per Week</th>
                 <th className="pb-6">Type</th>
                 <th className="pb-6 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {subjects.map((s, idx) => (
-                <motion.tr key={s.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.05 * idx }}
-                  className="border-b transition-all" style={{ borderColor: "var(--color-border)" }}>
-                  <td className="py-5 font-heading text-base font-bold" style={{ color: "var(--color-text)" }}>{s.name}</td>
-                  <td className="py-5">
-                    <span className="rounded-lg border px-3 py-1.5 text-xs font-bold" style={{ borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}>
-                      🏫 {classById[s.class_id]?.name || "—"}
-                    </span>
-                  </td>
-                  <td className="py-5 text-center">
-                    <div className="flex justify-center items-center gap-1">
-                      {[...Array(Math.min(s.lectures_per_week, 7))].map((_, i) => (
-                        <div key={i} className="h-2 w-2 rounded-full bg-secondary" />
-                      ))}
-                      <span className="ml-2 text-xs font-black" style={{ color: "var(--color-text-muted)" }}>{s.lectures_per_week}</span>
-                    </div>
-                  </td>
-                  <td className="py-5">
-                    <span className={`rounded-lg px-2 py-1 text-[10px] font-black uppercase tracking-widest ${s.is_lab ? "bg-purple-500/20 text-purple-400 border border-purple-500/30" : "bg-blue-500/20 text-blue-400 border border-blue-500/30"}`}>
-                      {s.is_lab ? "Lab" : "Theory"}
-                    </span>
-                    {s.priority_morning && <span className="ml-2 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-1 text-[10px] font-black uppercase">AM Priority</span>}
-                  </td>
-                  <td className="py-5 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => openEdit(s)} className="rounded-lg border px-3 py-1.5 text-xs font-bold transition-all hover:border-secondary/50 hover:text-secondary"
-                        style={{ borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}>✏️ Edit</button>
-                      <button onClick={() => setDeleteTarget(s)} className="rounded-lg border border-red-500/20 bg-red-500/5 px-3 py-1.5 text-xs font-bold text-red-400 hover:bg-red-500/20">🗑️ Delete</button>
-                    </div>
-                  </td>
-                </motion.tr>
-              ))}
+              {subjects.map((s, idx) => {
+                const linkedClasses = (s.class_ids?.length ? s.class_ids : (s.class_id ? [s.class_id] : []));
+                return (
+                  <motion.tr key={s.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.05 * idx }}
+                    className="border-b transition-all" style={{ borderColor: "var(--color-border)" }}>
+                    <td className="py-5 font-heading text-base font-bold" style={{ color: "var(--color-text)" }}>{s.name}</td>
+                    <td className="py-5">
+                      <div className="flex flex-wrap gap-1">
+                        {linkedClasses.length ? linkedClasses.map((cid) => (
+                          <span key={cid} className="rounded-md border px-2 py-0.5 text-[10px] font-bold" style={{ borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}>
+                            {classById[cid]?.name || `#${cid}`}
+                          </span>
+                        )) : <span className="text-xs text-red-400">No class</span>}
+                      </div>
+                    </td>
+                    <td className="py-5 text-center">
+                      <div className="flex justify-center items-center gap-1">
+                        {[...Array(Math.min(s.lectures_per_week, 7))].map((_, i) => (
+                          <div key={i} className="h-2 w-2 rounded-full bg-secondary" />
+                        ))}
+                        <span className="ml-2 text-xs font-black" style={{ color: "var(--color-text-muted)" }}>{s.lectures_per_week}</span>
+                      </div>
+                    </td>
+                    <td className="py-5">
+                      <span className={`rounded-lg px-2 py-1 text-[10px] font-black uppercase tracking-widest ${s.is_lab ? "bg-purple-500/20 text-purple-400 border border-purple-500/30" : "bg-blue-500/20 text-blue-400 border border-blue-500/30"}`}>
+                        {s.is_lab ? "Lab" : "Theory"}
+                      </span>
+                      {s.priority_morning && <span className="ml-2 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-1 text-[10px] font-black uppercase">AM Priority</span>}
+                    </td>
+                    <td className="py-5 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button onClick={() => openEdit(s)} className="rounded-lg border px-3 py-1.5 text-xs font-bold transition-all hover:border-secondary/50 hover:text-secondary"
+                          style={{ borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}>✏️ Edit</button>
+                        <button onClick={() => setDeleteTarget(s)} className="rounded-lg border border-red-500/20 bg-red-500/5 px-3 py-1.5 text-xs font-bold text-red-400 hover:bg-red-500/20">🗑️ Delete</button>
+                      </div>
+                    </td>
+                  </motion.tr>
+                );
+              })}
             </tbody>
           </table>
           {!subjects.length && <p className="py-12 text-center text-sm font-bold uppercase tracking-widest" style={{ color: "var(--color-text-faint)" }}>No subjects yet.</p>}
@@ -166,12 +197,23 @@ export default function SubjectsPage() {
             <label className="text-[10px] font-black uppercase tracking-widest ml-1" style={{ color: "var(--color-text-muted)" }}>Subject Name</label>
             <input className="input" placeholder="e.g., Mathematics" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
           </div>
-          <div className="space-y-1.5">
-            <label className="text-[10px] font-black uppercase tracking-widest ml-1" style={{ color: "var(--color-text-muted)" }}>Class</label>
-            <select className="input" value={form.class_id} onChange={(e) => setForm({ ...form, class_id: e.target.value })}>
-              <option value="">Select Class</option>
-              {classes.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-            </select>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest ml-1" style={{ color: "var(--color-text-muted)" }}>Classes (select one or more)</label>
+            <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-1">
+              {classes.map((c) => {
+                const selected = form.class_ids.includes(String(c.id));
+                return (
+                  <button key={c.id} type="button"
+                    onClick={() => toggleClassId(c.id)}
+                    className={`rounded-lg border px-3 py-2 text-xs font-bold text-left transition-all ${selected ? "border-secondary bg-secondary/10 text-secondary" : "hover:border-secondary/30"}`}
+                    style={!selected ? { borderColor: "var(--color-border)", color: "var(--color-text-muted)" } : {}}>
+                    {selected ? "✓ " : ""}{c.name}
+                    {c.department && <span className="block text-[9px] opacity-60 mt-0.5">{c.department}</span>}
+                  </button>
+                );
+              })}
+            </div>
+            {!classes.length && <p className="text-xs text-red-400">No classes found. Add classes first.</p>}
           </div>
           <div className="space-y-1.5">
             <label className="text-[10px] font-black uppercase tracking-widest ml-1" style={{ color: "var(--color-text-muted)" }}>Lectures / Week</label>
@@ -203,11 +245,12 @@ export default function SubjectsPage() {
         <div className="space-y-5 p-2 text-left">
           <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
             Upload <strong>CSV / Excel</strong> with columns:<br />
-            <code className="text-secondary text-xs">name, class_name, lectures_per_week, priority_morning, is_lab</code>
+            <code className="text-secondary text-xs">name, department, lectures_per_week, priority_morning, is_lab</code><br />
+            <span className="text-xs mt-1 block opacity-70">Use <strong>department</strong> to auto-assign to all classes in that department. Or use <strong>class_name</strong> for a specific class.</span>
           </p>
           <div className="space-y-1.5">
             <label className="text-[10px] font-black uppercase tracking-widest ml-1" style={{ color: "var(--color-text-muted)" }}>Select File</label>
-            <input ref={bulkFileRef} type="file" className="input cursor-pointer" />
+            <input ref={bulkFileRef} type="file" className="input cursor-pointer" accept=".csv,.xlsx" />
           </div>
           <div className="flex gap-3">
             <button className="btn-secondary flex-1 text-sm" onClick={async () => {

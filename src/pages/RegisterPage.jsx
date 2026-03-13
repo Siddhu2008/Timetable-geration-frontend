@@ -25,7 +25,7 @@ export default function RegisterPage() {
     client.get("/auth/register-options").then((r) => {
       const fetchedClasses = r.data.classes || [];
       setClasses(fetchedClasses);
-      if (fetchedClasses.length === 1) {
+      if (fetchedClasses.length > 0) {
         setClassId(fetchedClasses[0].id);
       }
     }).catch(() => { });
@@ -70,10 +70,10 @@ export default function RegisterPage() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="royal-header mb-4 font-heading text-5xl font-bold leading-tight lg:text-7xl">
-              Architect <br /> The Future
+              Create Your <br /> Account
             </h1>
             <p className="text-lg text-slate-400 lg:text-xl">
-              Establish your presence in the central Academic Matrix. Synchronize schedules and coordinate globally.
+              Join our platform to easily manage and generate your academic timetables.
             </p>
 
             {/* 3D-like Floating Element */}
@@ -103,16 +103,16 @@ export default function RegisterPage() {
             {/* Decorative line */}
             <div className="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-transparent via-secondary to-transparent opacity-50" />
 
-            <h2 className="mb-2 font-heading text-3xl font-bold text-white">Join the Empire</h2>
-            <p className="mb-8 text-sm text-slate-400">Establish your Academic Matrix</p>
+            <h2 className="mb-2 font-heading text-3xl font-bold text-white">Register</h2>
+            <p className="mb-8 text-sm text-slate-400">Create your account</p>
 
             <div className="space-y-5">
 
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-secondary">Academic Role</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-secondary">Role</label>
                 <select className="input w-full" value={role} onChange={(e) => setRole(e.target.value)}>
-                  <option value="student" className="bg-[#050a14]">Student Scholar</option>
-                  <option value="teacher" className="bg-[#050a14]">Faculty Overseer</option>
+                  <option value="student" className="bg-[#050a14]">Student</option>
+                  <option value="teacher" className="bg-[#050a14]">Teacher</option>
                 </select>
               </div>
 
@@ -123,7 +123,7 @@ export default function RegisterPage() {
                   autoComplete="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Identify yourself"
+                  placeholder="Username"
                   required
                 />
               </div>
@@ -136,42 +136,24 @@ export default function RegisterPage() {
                   autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="matrix@academy.edu"
+                  placeholder="email@example.com"
                 />
               </div>
 
               {role === "teacher" && (
                 <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-secondary">Full Title</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-secondary">Full Name</label>
                   <input
                     className="input w-full"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Dr. Turing"
+                    placeholder="e.g. John Doe"
                   />
                 </div>
               )}
 
-              {role === "student" && (
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-secondary">Cohort / Formation</label>
-                  <select className="input w-full" value={classId} onChange={(e) => setClassId(e.target.value)} required>
-                    {classes.length === 0 ? (
-                      <option value="" className="bg-[#050a14]" disabled>No Matrices Available</option>
-                    ) : (
-                      classes.length > 1 && <option value="" className="bg-[#050a14]" disabled>Select Matrix</option>
-                    )}
-                    {classes.map((c) => (
-                      <option key={c.id} value={c.id} className="bg-[#050a14]">
-                        {c.name} Spectrum
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-secondary">Encryption Key</label>
+                <label className="text-xs font-bold uppercase tracking-widest text-secondary">Password</label>
                 <div className="relative">
                   <input
                     className="input w-full pr-10"
@@ -196,12 +178,12 @@ export default function RegisterPage() {
               {error && <p className="rounded-lg bg-red-500/10 p-3 text-sm text-red-400 border border-red-500/20">{error}</p>}
               {ok && <p className="rounded-lg bg-emerald-500/10 p-3 text-sm text-emerald-400 border border-emerald-500/20">{ok}</p>}
 
-              <button className="btn w-full mt-4">Forge Alliance</button>
+              <button className="btn w-full mt-4">Register</button>
 
               <div className="mt-6 flex items-center justify-center gap-2 text-sm">
-                <span className="text-slate-500">Already established?</span>
+                <span className="text-slate-500">Already have an account?</span>
                 <Link to="/login" className="font-bold text-secondary transition-colors hover:text-gold-light">
-                  Authenticate Here
+                  Login Here
                 </Link>
               </div>
             </div>

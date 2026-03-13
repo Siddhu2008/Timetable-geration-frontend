@@ -14,7 +14,7 @@ body {
 /* ==================== Main Container ==================== */
 .landing-page {
   overflow: hidden;
-  background: linear-gradient(to bottom, #0f172a, #0f1419, #0f172a);
+  background: #050a14;
   color: white;
 }
 
